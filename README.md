@@ -17,4 +17,4 @@ solr-to-elasticsearch.py https://localhost:8080/searcher/#/core/ https://localho
 ```
 
 ## Notes
-Could not use solr deep paging because version used is 4.6 
+Could not use solr deep paging because version in use is 4.6 
