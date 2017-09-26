@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import argparse
 import pysolr
 import json
@@ -29,12 +31,9 @@ def main():
         args = parse_args()
         elastic = Elasticsearch(args['elasticsearch_url'])
         solr = pysolr.Solr(args['solr_url'], timeout=args['timeout'])
-        # print(elastic.cluster)
-        # print(solr.log)
         query = solr.search(q='*:*', rows=0, fl='numFound')
         create_elastic_index(elastic, args['elasticsearch_index'])
         bar = Bar('Indexing', max=query.hits, suffix='%(index)d/%(max)d - %(percent).1f%% - %(eta)ds')
-
         for i in islice(count(), 0, query.hits, args['pagesize']):
             solr_response = solr.search(q='*:*', start=i, rows=args['pagesize'])
             data = []
@@ -43,7 +42,7 @@ def main():
                 _id = document.pop('GlobalId') 
                 data.append('{"index": {"_id":"%s"}}\n %s \n' % (_id, json.dumps(document)))            
             elastic_response = elastic.bulk(index=args['elasticsearch_index'], doc_type=args['elasticsearch_doctype'], body=''.join(data))
-            bar.finish()
+        bar.finish()
     except KeyboardInterrupt:
         print('Interrupted')
 
