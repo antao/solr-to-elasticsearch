@@ -1,11 +1,12 @@
 #!/usr/bin/python3
 
 import argparse
-import pysolr
+import pysolr # pip install pysolr
 import json
 import time
+import uuid 
 from progress.bar import Bar # pip install progress
-from elasticsearch import Elasticsearch
+from elasticsearch import Elasticsearch # pip install elasticsearch
 from itertools import * 
 
 def parse_args():
@@ -39,8 +40,7 @@ def main():
             data = []
             for document in solr_response.docs:
                 bar.next()
-                _id = document.pop('GlobalId') 
-                data.append('{"index": {"_id":"%s"}}\n %s \n' % (_id, json.dumps(document)))            
+                data.append('{"index": {"_id":"%s"}}\n %s \n' % (uuid.uuid4(), json.dumps(document)))            
             elastic_response = elastic.bulk(index=args['elasticsearch_index'], doc_type=args['elasticsearch_doctype'], body=''.join(data))
         bar.finish()
     except KeyboardInterrupt:
