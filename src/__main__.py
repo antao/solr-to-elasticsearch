@@ -1,12 +1,12 @@
 #!/usr/bin/python3
 
 import argparse
-import pysolr # pip install pysolr
+import pysolr
 import json
 import time
 import uuid 
-from progress.bar import Bar # pip install progress
-from elasticsearch import Elasticsearch # pip install elasticsearch
+from progress.bar import Bar
+from elasticsearch import Elasticsearch
 from itertools import * 
 
 def parse_args():
